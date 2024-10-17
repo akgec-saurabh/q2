@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { LIMIT } from "./constants.js";
 import userRoutes from "./routes/user.routes.js";
+import preferenceRoutes from "./routes/preference.routes.js";
 const app = express();
 
 app.use(
@@ -18,5 +19,6 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/preference", preferenceRoutes);
 
 export { app };

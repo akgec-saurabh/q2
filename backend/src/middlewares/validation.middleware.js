@@ -12,7 +12,7 @@ const validateRegistration = [
     .trim()
     .notEmpty()
     .isLength({ min: 5 })
-    .withMessage("Full Name must be 5 characters long"),
+    .withMessage("Full Name must be 5 cha racters long"),
   body("password")
     .trim()
     .notEmpty()
