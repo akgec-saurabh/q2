@@ -1,16 +1,20 @@
 import { BarChart } from "../components/charts/bar-chart";
 import { LineChart } from "../components/charts/line-chart";
-import RealTimeData from "../components/real-time-data";
 
-export default function Home() {
-  const data = [
-    { feature: "A", time: 4048 },
-    { feature: "B", time: 2269 },
-    { feature: "C", time: 3206 },
-    { feature: "D", time: 2276 },
-    { feature: "E", time: 3045 },
-    { feature: "F", time: 2384 },
-  ];
+const getData = async () => {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}data/features`;
+  console.log(url);
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  const data = await res.json();
+  return data.data.data;
+};
+
+export default async function Home() {
+  const barData = await getData();
+  console.log(barData);
 
   const lineData = [
     {
@@ -46,9 +50,8 @@ export default function Home() {
   return (
     <div>
       <h1>Hello World</h1>
-      <BarChart data={data} width={500} height={500} />
+      <BarChart data={barData} width={500} height={500} />
       <LineChart data={lineData} width={500} height={500} />
-      <RealTimeData />
     </div>
   );
 }

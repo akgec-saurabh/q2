@@ -7,7 +7,7 @@ const BAR_PADDING = 0.3;
 type BarProps = {
   width: number;
   height: number;
-  data: { feature: string; time: number }[];
+  data: { feature: string; total: number }[];
 };
 
 export const BarChart = ({ width, height, data }: BarProps) => {
@@ -26,7 +26,8 @@ export const BarChart = ({ width, height, data }: BarProps) => {
       .padding(BAR_PADDING);
   }, [boundsHeight, groups]);
 
-  const [min, max] = d3.extent(data.map((d) => d.time));
+  const [min, max] = d3.extent(data.map((d) => d.total));
+  console.log(min, max);
 
   // X axis
   const xScale = useMemo(() => {
@@ -45,7 +46,7 @@ export const BarChart = ({ width, height, data }: BarProps) => {
         <rect
           x={xScale(0)}
           y={yScale(d.feature)}
-          width={xScale(d.time)}
+          width={xScale(d.total)}
           height={yScale.bandwidth()}
           opacity={0.7}
           stroke="#9d174d"
@@ -55,14 +56,14 @@ export const BarChart = ({ width, height, data }: BarProps) => {
           rx={1}
         />
         <text
-          x={xScale(d.time) + (xScale(d.time + 10) > boundsWidth ? -10 : +10)}
+          x={xScale(d.total) + (xScale(d.total + 10) > boundsWidth ? -10 : +10)}
           y={y + yScale.bandwidth() / 2}
-          textAnchor={xScale(d.time + 10) > boundsWidth ? "end" : "start"}
+          textAnchor={xScale(d.total + 10) > boundsWidth ? "end" : "start"}
           alignmentBaseline="central"
           fontSize={12}
-          opacity={xScale(d.time) > 90 ? 1 : 0} // hide label if bar is not wide enough
+          opacity={xScale(d.total) > 90 ? 1 : 0} // hide label if bar is not wide enough
         >
-          {d.time}
+          {d.total}
         </text>
       </g>
     );

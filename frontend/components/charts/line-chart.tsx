@@ -26,6 +26,7 @@ export const LineChart = ({ width, height, data }: LineChartProps) => {
 
   // Y axis
   const [min, max] = d3.extent(formattedData, (d) => d.y);
+  console.log(min, max);
   const yScale = d3
     .scaleLinear()
     .domain([0, max || 0])
@@ -47,7 +48,7 @@ export const LineChart = ({ width, height, data }: LineChartProps) => {
     const xAxisGenerator = d3
       .axisBottom(xScale)
       .ticks(6)
-      .tickFormat(d3.timeFormat("%Y-%m-%d"));
+      .tickFormat((d) => d3.timeFormat("%Y-%m-%d")(d as Date));
     svgElement
       .append("g")
       .attr("transform", "translate(0," + boundsHeight + ")")

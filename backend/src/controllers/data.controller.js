@@ -71,16 +71,20 @@ export const getFeatures = asyncHandler(async (req, res) => {
   }));
 
   res.status(200).json(
-    new ApiResponse(200, "Success", {
-      total: filterData.length,
-      data: {
-        Gender: !gender ? "All" : gender,
-        Age: !age ? "All" : age,
-        StartDate: !startDate ? "All" : startDate,
-        EndDate: !endDate ? "All" : endDate,
-        data: transformedData,
+    new ApiResponse(
+      200,
+      {
+        total: filterData.length,
+        data: {
+          Gender: !gender ? "All" : gender,
+          Age: !age ? "All" : age,
+          StartDate: !startDate ? "All" : startDate,
+          EndDate: !endDate ? "All" : endDate,
+          data: transformedData,
+        },
       },
-    })
+      "Success"
+    )
   );
 });
 
@@ -167,10 +171,14 @@ export const getTrend = asyncHandler(async (req, res) => {
   }));
 
   res.status(200).json(
-    new ApiResponse(200, "Success", {
-      feature,
-      total: transformedTrendData.length,
-      trendData: transformedTrendData,
-    })
+    new ApiResponse(
+      200,
+      {
+        feature,
+        total: transformedTrendData.length,
+        trendData: transformedTrendData,
+      },
+      "Success"
+    )
   );
 });
