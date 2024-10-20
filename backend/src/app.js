@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import { LIMIT } from "./constants.js";
 import userRoutes from "./routes/user.routes.js";
 import preferenceRoutes from "./routes/preference.routes.js";
+import dataRoutes from "./routes/data.routes.js";
+
 const app = express();
 
 app.use(
@@ -20,5 +22,6 @@ app.use(cookieParser());
 // routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/preference", preferenceRoutes);
+app.use("/api/v1/data", dataRoutes);
 
 export { app };
