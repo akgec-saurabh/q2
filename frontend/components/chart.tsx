@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Share2, RotateCcw } from "lucide-react";
-import { BarChart } from "./charts/bar-chart";
 
 export default function Chart() {
   const [darkMode, setDarkMode] = useState(false);
@@ -56,9 +55,7 @@ export default function Chart() {
                 <CardTitle>Bar Chart</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-[400px] flex items-center justify-center bg-gray-200">
-                  <BarChart />
-                </div>
+                <div className="h-[400px] flex items-center justify-center bg-gray-200"></div>
               </CardContent>
             </Card>
           </TabsContent>
