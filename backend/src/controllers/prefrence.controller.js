@@ -31,7 +31,9 @@ export const getPreference = asyncHandler(async (req, res) => {
   const preference = await UserPreference.findOne({ userId });
 
   if (!preference) {
-    throw new ApiError(404, "Preference not found for the user");
+    return res
+      .status(404)
+      .json(new ApiError(404, "Preference not found for the user"));
   }
 
   res
@@ -45,7 +47,9 @@ export const deletePreference = asyncHandler(async (req, res) => {
   const existingPreference = await UserPreference.findOne({ userId });
 
   if (!existingPreference) {
-    throw new ApiError(404, "Preference not found for the user");
+    return res
+      .status(404)
+      .json(new ApiError(404, "Preference not found for the user"));
   }
 
   await UserPreference.findOneAndDelete({ userId });

@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const existingUser = await User.findOne({ $or: [{ username }, { email }] });
 
   if (existingUser) {
-    throw new ApiError(409, "User already Exist");
+    return res.status(409).json(new ApiError(409, "User already Exist"));
   }
 
   const user = await User.create({
@@ -41,7 +41,9 @@ const registerUser = asyncHandler(async (req, res) => {
   );
 
   if (!createdUser) {
-    throw new ApiError(500, "Error Occured while creating User");
+    return res
+      .status(500)
+      .json(new ApiError(500, "Error Occured while creating User"));
   }
 
   res
@@ -54,15 +56,18 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const existingUser = await User.findOne({ $or: [{ username }, { email }] });
   if (!existingUser) {
-    throw new ApiError(
-      404,
-      "User does not exist. Please check your Credentials"
-    );
+    return res
+      .status(404)
+      .json(
+        new ApiError(404, "User does not exist. Please check your Credentials")
+      );
   }
 
   const isPasswordValid = existingUser.isPasswordCorrect(password);
   if (!isPasswordValid) {
-    throw new ApiError(401, "Please check your Credentials");
+    return res
+      .status(401)
+      .json(new ApiError(401, "Please check your Credentials"));
   }
 
   const { accessToken, refreshToken } =
@@ -131,15 +136,19 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     user = await User.findById(decodedToken._id);
 
     if (!user) {
-      throw new ApiError(401, "Unauthorized Access");
+      return res.status(401).json(new ApiError(401, "Unauthorized Access"));
     }
 
     if (incomingRefreshToken !== user.refreshToken) {
-      throw new ApiError(401, "Unauthorized Access");
+      return res.status(401).json(new ApiError(401, "Unauthorized Access"));
     }
   } catch (error) {
     console.log(error);
-    throw new ApiError(500, "Some error Occured while refreshing access Token");
+    return res
+      .status(500)
+      .json(
+        new ApiError(500, "Some error Occured while refreshing access Token")
+      );
   }
   const { accessToken, refreshToken: newRefreshToken } =
     await generateAccessTokenAndRefreshToken(decodedToken._id);
