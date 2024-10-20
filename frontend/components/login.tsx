@@ -23,6 +23,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LogIn } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -33,6 +36,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -43,10 +47,29 @@ export default function Login() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Form submitted:", data);
-    setIsSubmitting(false);
+    let response;
+    try {
+      response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}users/login`,
+        data
+      );
+
+      if (response?.status !== 200) {
+        toast.error(response.data?.message || "Something went wrong");
+      }
+      toast.success("Logged in successfully");
+      setIsSubmitting(false);
+      router.push("/chart");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || "Something went wrong";
+        toast.error(message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

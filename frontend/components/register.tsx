@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -31,6 +32,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -50,15 +52,19 @@ export default function Register() {
         data
       );
 
-      console.log(response.data);
       if (response?.status !== 201) {
-        toast.error("Something went wrong");
+        toast.error(response.data?.message || "Something went wrong");
       }
       toast.success("Account created successfully");
       setIsSubmitting(false);
+      router.push("/auth/login");
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || "Something went wrong";
+        toast.error(message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     } finally {
       setIsSubmitting(false);
     }
